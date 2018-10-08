@@ -1,5 +1,5 @@
 from pytrends.request import TrendReq
-pytrends = TrendReq(hl = 'en-US', tz=360) #hl: header language(데이터 설정언어),tz: timezone offset(검색하는 위치: 360은 미국 중부 기준시(CST))#
+pytrends = TrendReq(hl = 'en-US', tz=360,proxies={'https':'https://34.203.233.13:80'}) #hl: header language(데이터 설정언어),tz: timezone offset(검색하는 위치: 360은 미국 중부 기준시(CST))#
 
 
 ##2.Payload 설정 후 글로벌 + 6개 국가별 데이터프레임 저장##
