@@ -1,0 +1,76 @@
+import requests
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+import pandas as pd
+
+#jbl 닷컴 등록률 확인
+us_jbl_url='https://www.jbl.com/bluetooth-speakers/'
+uk_jbl_url='https://uk.jbl.com/bluetooth-portables/'
+sp_jbl_url='https://www.jbl.com.br/wireless/caixas-de-som-bluetooth'#('p',{'class':'shelf-item-name'})
+ms_jbl_url='http://mx.jbl.com/bluetooth-portables/'
+de_jbl_url='https://de.jbl.com/tragbare-lautsprecher-1/'
+fr_jbl_url='https://fr.jbl.com/enceintes-portables-1/'
+es_jbl_url='http://eu.jbl.com/bluetooth-portables'
+
+jbl_country_url=['us_jbl_url','uk_jbl_url','sp_jbl_url','ms_jbl_url','de_jbl_url','fr_jbl_url','es_jbl_url']
+for country in jbl_country_url:
+    res=requests.get(country,verify=False)
+    html=res.text
+    jbl_bsobj=BeautifulSoup(html,'html.parser')
+    jbl_product=jbl_bsobj.findAll('div',{'class':'product-name'})
+
+
+jbl=[]
+for product in range(0,len(jbl_product)):
+    jbl.append(jbl_product[product].text.strip('\n'))
+
+jbl_list=pd.DataFrame(jbl)
+
+
+#BOSE 국가별 닷컴 등록률 확인
+us_bose_url='https://www.bose.com/en_us/products/speakers/portable_speakers.html'
+uk_bose_url='https://www.bose.co.uk/en_gb/products/speakers/portable_speakers.html'
+ms_bose_url='https://www.bose.mx/es_mx/products/speakers/portable_speakers.html'
+es_bose_url='https://www.bose.es/es_es/products/speakers/portable_speakers.html'
+de_bose_url='https://www.bose.de/de_de/products/speakers/portable_speakers.html'
+fr_bose_url='https://www.bose.fr/fr_fr/products/speakers/portable_speakers.html'
+sp_bose_url='https://www.boselatam.com/es_ar/products/speakers/portable_speakers.html'
+
+
+countrylist_bose=[us_bose_url,uk_bose_url,sp_bose_url,ms_bose_url,es_bose_url,de_bose_url,fr_bose_url]
+for url in country_list:
+    res=requests.get(url,verify=False)
+    html=res.text
+    bose_bsobj=BeautifulSoup(html,'html.parser')
+    bose_product=bose_bsobj.findAll('a',{'class':'bose-title__link js-productTitle__link'})
+    i=1
+    bose=[]
+    for product in range(0,len(bose_product)):
+        bose.append(bose_product[product].text.strip('\n'))
+    bose_list=pd.DataFrame(bose)
+    bose_list.to_excel(excel_writer, index=False, sheet_name='BOSE', startcol=i+len(country_list))
+    excel_writer.save()
+    
+   
+   
+   
+#sony 국가별 닷컴 등록률 확인
+us_sony_url='https://www.sony.com/electronics/wireless-speakers-docks/t/wireless-speakers'
+uk_sony_url='https://www.sony.co.uk/electronics/wireless-speakers-docks/t/wireless-speakers'
+sp_sony_url='https://www.sony.com.br/electronics/caixas-de-som-sem-fio/t/caixas-acusticas-wireless'
+ms_sony_url='https://www.sony.com.mx/electronics/bocinas-inalambricas-bluetooth-portatiles/t/bocinas-inalambricas-bluetooth'
+fr_sony_url='https://www.sony.fr/electronics/enceintes-stations-sans-fil/t/enceintes-sans-fil'
+de_sony_url='https://www.sony.de/electronics/kabellose-lautsprecher-docking-stations/t/kabellose-lautsprecher'
+es_sony_url='https://www.sony.es/electronics/altavoces-inalambricos-docks/t/altavoces-inalambricos'
+countrylist_sony=[us_sony_url,uk_sony_url,sp_sony_url,ms_sony_url,fr_sony_url,de_sony_url,es_sony_url]
+res=requests.get(url,verify=False)
+html=res.text
+sony_bsobj=BeautifulSoup(html,'html.parser')
+sony_product=sony_bsobj.findAll('div',{'class':'product-name p2'})
+sony=[]
+for product in range(0,len(sony_product)):
+    sony.append(sony_product[product].text.strip('\n'))
+sony_list=pd.DataFrame(sony)
+sony_list_v2=sony_list.drop_duplicates()
+sony_list_v3=sony_list_v2[(sony_list_v2[0].str.contains("EXTRA BASS")==True)]
+sony_list_v3
